@@ -58,7 +58,7 @@ export async function register({ name, email, password, password_confirmation }:
     setStorageItem('token', user.token);
     setStorageItem('user', JSON.stringify(user));
 
-    if(!user.message){
+    if(!user.errors){
         window.location.href = "/";
     }
 

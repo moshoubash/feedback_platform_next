@@ -15,7 +15,7 @@ export default function Navbar() {
       setIsAuthenticated(true);
       userProfile().then((user: string | null) => {
         if (user) {
-          setUserName(JSON.parse(user || "{}")["user"].email);
+          setUserName(JSON.parse(user || "{}")["user"]?.email ?? "Unknown");
         }
       });
     }
