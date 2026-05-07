@@ -3,22 +3,24 @@
 import Link from "next/link";
 import { logout, userProfile } from "@/api/users/route";
 import { useEffect, useState } from "react";
+import { getStorageItem } from "@/lib/storage";
 
 export default function Navbar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    if (token) {
-      setIsAuthenticated(true);
-      userProfile().then((user: string | null) => {
+    async function checkAuth() {
+      const token = await getStorageItem("token");
+      if (token) {
+        setIsAuthenticated(true);
+        const user = await userProfile();
         if (user) {
           setUserName(JSON.parse(user || "{}")["user"]?.email ?? "Unknown");
         }
-      });
+      }
     }
+    checkAuth();
   }, []);
 
   const handleLogout = async () => {

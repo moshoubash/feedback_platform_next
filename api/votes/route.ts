@@ -4,15 +4,10 @@ if (!BACKEND_API_URL) {
   console.warn("NEXT_PUBLIC_BACKEND_URL is not defined");
 }
 
-const getStorageItem = (key: string) => {
-    if (typeof window !== 'undefined') {
-        return localStorage.getItem(key);
-    }
-    return null;
-};
+import { getStorageItem } from "@/lib/storage";
 
 export async function upvote(postId:string) {
-    const token = getStorageItem('token');
+    const token = await getStorageItem('token');
     if(!token){
         window.location.href = "/login";
     }
@@ -24,12 +19,14 @@ export async function upvote(postId:string) {
         },
     });
     const data = await response.json();
-    console.log("upvote", data);
+    if (typeof window !== 'undefined') {
+        window.location.reload();
+    }
     return Response.json(data);
 }
 
 export async function downvote(postId:string) {
-    const token = getStorageItem('token');
+    const token = await getStorageItem('token');
     if(!token){
         window.location.href = "/login";
     }
@@ -41,6 +38,8 @@ export async function downvote(postId:string) {
         },
     });
     const data = await response.json();
-    console.log("downvote",data);
+    if (typeof window !== 'undefined') {
+        window.location.reload();
+    }
     return Response.json(data);
 }

@@ -20,7 +20,7 @@ export default function Post({ post }: { post: any }) {
           onClick={() => handleVote("upvote")}
           className="text-green-600 bg-green-200 hover:bg-green-300 transition-all duration-200 rounded-md text-lg my-2 px-2 cursor-pointer"
         >
-          ↑
+          ↑ {post.user_voted == true && post.user_voted_type == 1 && "✓"}
         </button>
         <span className="text-gray-600 text-lg my-2 px-2">
           {post.total_votes ?? 0}
@@ -29,7 +29,7 @@ export default function Post({ post }: { post: any }) {
           onClick={() => handleVote("downvote")}
           className="text-red-600 bg-red-200 hover:bg-red-300 transition-all duration-200 rounded-md text-lg my-2 px-2 cursor-pointer"
         >
-          ↓
+          ↓ {post.user_voted == true && post.user_voted_type == -1 && "✓"}
         </button>
       </div>
       <p className="text-gray-600 text-lg my-2">{post.description}</p>

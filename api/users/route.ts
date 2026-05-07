@@ -4,24 +4,7 @@ if (!BACKEND_API_URL) {
   console.warn("NEXT_PUBLIC_BACKEND_URL is not defined");
 }
 
-const getStorageItem = (key: string) => {
-    if (typeof window !== 'undefined') {
-        return localStorage.getItem(key);
-    }
-    return null;
-};
-
-const setStorageItem = (key: string, value: string) => {
-    if (typeof window !== 'undefined') {
-        localStorage.setItem(key, value);
-    }
-};
-
-const removeStorageItem = (key: string) => {
-    if (typeof window !== 'undefined') {
-        localStorage.removeItem(key);
-    }
-};
+import { getStorageItem, setStorageItem, removeStorageItem } from "@/lib/storage";
 
 export async function login({ email, password }: { email: string; password: string }) {
     const res = await fetch(`${BACKEND_API_URL}/login`, {
@@ -66,12 +49,12 @@ export async function register({ name, email, password, password_confirmation }:
 }
 
 export async function userProfile() {
-    const res = getStorageItem('user');
+    const res = await getStorageItem('user');
     return res;
 }
 
 export async function logout() {
-    const token = getStorageItem('token');
+    const token = await getStorageItem('token');
     const res = await fetch(`${BACKEND_API_URL}/logout`, {
         method: 'POST',
         headers: {

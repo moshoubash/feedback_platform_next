@@ -4,27 +4,45 @@ if (!BACKEND_API_URL) {
   console.warn("NEXT_PUBLIC_BACKEND_URL is not defined");
 }
 
-const getStorageItem = (key: string) => {
-    if (typeof window !== 'undefined') {
-        return localStorage.getItem(key);
-    }
-    return null;
-};
+import { getStorageItem } from "@/lib/storage";
 
-export async function getPosts() {
-    const res = await fetch(`${BACKEND_API_URL}/posts`, {
+// export async function getPosts() {
+//     const res = await fetch(`${BACKEND_API_URL}/posts`, {
+//         method: 'GET',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Accept': 'application/json',
+//         },
+//     });
+//     const posts = await res.json();
+//     return posts;
+// }
+
+export async function getPostsForAuthenticatedUsers() {
+    const token = await getStorageItem('token');
+
+    // if(!token) {
+    //     return getPosts();
+    // }
+    const res = await fetch(`${BACKEND_API_URL}/posts/get-posts-for-authenticated-users`, {
         method: 'GET',
+        cache: 'no-store',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
         },
     });
+
     const posts = await res.json();
+
+    console.log(posts);
+
     return posts;
 }
 
 export async function createPost({ title, description, category }: { title: string; description: string, category: string}) {
-    const token = getStorageItem('token');
+    const token = await getStorageItem('token');
     const res = await fetch(`${BACKEND_API_URL}/posts`, {
         method: 'POST',
         headers: {
@@ -39,7 +57,7 @@ export async function createPost({ title, description, category }: { title: stri
 }
 
 export async function updatePost({ slug, title, description, category }: { slug: string; title: string; description: string; category: string }) {
-    const token = getStorageItem('token');
+    const token = await getStorageItem('token');
     const res = await fetch(`${BACKEND_API_URL}/posts/${slug}`, {
         method: 'PUT',
         headers: {
@@ -54,7 +72,7 @@ export async function updatePost({ slug, title, description, category }: { slug:
 }
 
 export async function deletePost({ slug }: { slug: string }) {
-    const token = getStorageItem('token');
+    const token = await getStorageItem('token');
     const res = await fetch(`${BACKEND_API_URL}/posts/${slug}`, {
         method: 'DELETE',
         headers: {

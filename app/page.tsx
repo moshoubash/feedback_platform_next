@@ -1,8 +1,8 @@
-import { getPosts } from "../api/posts/route";
+import { getPostsForAuthenticatedUsers } from "../api/posts/route";
 import Post from "@/components/posts/Post";
 
 export default async function Home() {
-  const posts = await getPosts();
+  const posts = await getPostsForAuthenticatedUsers();
 
   return (
     <>
@@ -13,8 +13,8 @@ export default async function Home() {
       <hr className="border-gray-400 my-2" />
 
       {/* list of posts */}
-      {posts.data
-        .sort((a: any, b: any) => b.total_votes - a.total_votes)
+      {posts?.data
+        ?.sort((a: any, b: any) => b.total_votes - a.total_votes)
         .map((post: any) => (
           <Post key={post.id} post={post} />
         ))}
