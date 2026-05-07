@@ -11,9 +11,11 @@ const getStorageItem = (key: string) => {
     return null;
 };
 
-export async function upvote(request: Request) {
+export async function upvote(postId:string) {
     const token = getStorageItem('token');
-    const { postId } = await request.json();
+    if(!token){
+        window.location.href = "/login";
+    }
     const response = await fetch(`${BACKEND_API_URL}/posts/${postId}/upvote`, {
         method: "PATCH",
         headers: {
@@ -26,9 +28,11 @@ export async function upvote(request: Request) {
     return Response.json(data);
 }
 
-export async function downvote(request: Request) {
+export async function downvote(postId:string) {
     const token = getStorageItem('token');
-    const { postId } = await request.json();
+    if(!token){
+        window.location.href = "/login";
+    }
     const response = await fetch(`${BACKEND_API_URL}/posts/${postId}/downvote`, {
         method: "PATCH",
         headers: {
