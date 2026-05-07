@@ -22,7 +22,6 @@ export default function RegisterPage() {
     });
 
     if (response.errors) {
-      console.log(response.errors);
       setErrors(response.errors);
     }
 

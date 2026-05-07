@@ -17,13 +17,13 @@ export async function login({ email, password }: { email: string; password: stri
     });
     const user = await res.json();
 
-    setStorageItem('token', user.token);
-    setStorageItem('user', JSON.stringify(user));
-
-    if(!user.message){
+    if(!user.errors){
+        setStorageItem('token', user.token);
+        setStorageItem('user', JSON.stringify(user));
         window.location.href = "/";
+        return;
     }
-
+    
     return user;
 }
 
@@ -37,12 +37,11 @@ export async function register({ name, email, password, password_confirmation }:
         body: JSON.stringify({ name, email, password, password_confirmation }),
     });
     const user = await res.json();
-
-    setStorageItem('token', user.token);
-    setStorageItem('user', JSON.stringify(user));
-
     if(!user.errors){
+        setStorageItem('token', user.token);
+        setStorageItem('user', JSON.stringify(user));
         window.location.href = "/";
+        return;
     }
 
     return user;
